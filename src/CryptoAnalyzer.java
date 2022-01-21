@@ -1,7 +1,7 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class CryptoAnalizer{
+public class CryptoAnalyzer {
     public static void main(String[] args) {
         welcomeUser();
 
@@ -57,7 +57,7 @@ public class CryptoAnalizer{
         int key = askForKey();
 
         String encryptedMessage = CaesarCipher.encrypt(message, key);
-        System.out.println("Encrypted Message = " + encryptedMessage);
+        System.out.println("Засшифрованный текст = " + encryptedMessage);
         System.out.println("Чтобы выйти из программы напишите \"0\"");
     }
 
@@ -68,7 +68,7 @@ public class CryptoAnalizer{
         int key = askForKey();
 
         String decryptedMessage = CaesarCipher.decrypt(message, key);
-        System.out.println("Decrypted Message = " + decryptedMessage);
+        System.out.println("Расшифрованный текст = " + decryptedMessage);
         System.out.println("Чтобы выйти из программы напишите \"0\"");
     }
 
@@ -77,11 +77,7 @@ public class CryptoAnalizer{
         System.out.println("Enter the encrypted message: "); // should be Path
         String encryptedMessage = console.nextLine();
 
-        if (encryptedMessage.charAt(0) >= 'A' && encryptedMessage.charAt(0) <= 'z'){
-        BruteForce.bruteForceLatin(encryptedMessage);
-        }else if (encryptedMessage.charAt(0) >= 'А' && encryptedMessage.charAt(0) <= 'я'){
-            BruteForce.bruteForceRussian(encryptedMessage);
-        }
+        BruteForce.bruteForceDecoder(encryptedMessage);
         System.out.println("");
         System.out.println("Чтобы выйти из программы напишите \"0\"");
     }
