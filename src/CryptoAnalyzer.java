@@ -1,4 +1,8 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class CryptoAnalyzer {
@@ -50,15 +54,17 @@ public class CryptoAnalyzer {
     }
 
 
+
+    // below are the calls for the encryption methods
+
     public static void caesarEncrypts() {    //this should work with files
-        Scanner console = new Scanner(System.in);
-        System.out.println("Enter a message: "); // should be Path
-        String message = console.nextLine();
+        String textFromUserFile = askUserForFilePath();
         int key = askForKey();
 
-        String encryptedMessage = CaesarCipher.encrypt(message, key);
-        System.out.println("Засшифрованный текст = " + encryptedMessage);
-        System.out.println("Чтобы выйти из программы напишите \"0\"");
+        String encryptedMessage = CaesarCipher.encrypt(textFromUserFile, key);
+        System.out.println("Введите путь куда пишем засшифрованный текст: "); //need a method for this(currently working on it on "test")
+        System.out.println("Засшифрованный текст: \n" + encryptedMessage);
+        System.exit(0);
     }
 
     public static void caesarDecrypts(){
@@ -68,8 +74,8 @@ public class CryptoAnalyzer {
         int key = askForKey();
 
         String decryptedMessage = CaesarCipher.decrypt(message, key);
-        System.out.println("Расшифрованный текст = " + decryptedMessage);
-        System.out.println("Чтобы выйти из программы напишите \"0\"");
+        System.out.println("Расшифрованный текст = \n" + decryptedMessage);
+        System.exit(0);
     }
 
     public static void caesarBruteForce() {    //this should work with files
@@ -79,8 +85,39 @@ public class CryptoAnalyzer {
 
         BruteForce.bruteForceDecoder(encryptedMessage);
         System.out.println("");
-        System.out.println("Чтобы выйти из программы напишите \"0\"");
+        System.exit(0);
     }
+
+
+// bellow are the methods who ask the user for paths and keys
+
+    private static String askUserForFilePath()  {
+        StringBuilder builder = new StringBuilder();
+        Scanner scanner = new Scanner(System.in);
+        String textFromUserFile = "";
+        System.out.println("Пожалуйста, введите путь к файлу: ");
+        while (true) {
+            Path filePath = Path.of(scanner.nextLine());
+            if (Files.isRegularFile(filePath)) {
+                List<String> list = null;
+                try {
+                    list = Files.readAllLines(filePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                for (String str : list)
+                    builder.append(str);
+                textFromUserFile = builder.toString();
+                System.out.println("Оригинальный текст из вашего файла: \n" + textFromUserFile);
+                break;
+            }else {
+                System.out.println("Путь не ведет к файлу.");
+                System.out.println("Пожалуйста, введите путь к файлу для зашифровки: ");
+            }
+        }
+        return textFromUserFile;
+    }
+
 
     public static int askForKey(){
             int key = 0;
@@ -93,5 +130,23 @@ public class CryptoAnalyzer {
                 key = askForKey();
             }
         return key;
+    }
+
+    public static Path resultingFile(){  // this is being worked on it "test"
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            Path filePath = Path.of(scanner.nextLine());
+            if (Files.isRegularFile(filePath)) {
+                List<String> list = null;
+                try {
+                    list = Files.readAllLines(filePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                System.out.println("Путь не ведет к файлу.");
+                System.out.println("Пожалуйста, введите путь к файлу для зашифровки: ");
+            }
+        }
     }
 }
