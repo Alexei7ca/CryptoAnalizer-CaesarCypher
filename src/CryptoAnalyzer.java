@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -57,34 +60,33 @@ public class CryptoAnalyzer {
 
     // below are the calls for the encryption methods
 
-    public static void caesarEncrypts() {    //this should work with files
+    public static void caesarEncrypts() {
         String textFromUserFile = askUserForFilePath();
         int key = askForKey();
 
         String encryptedMessage = CaesarCipher.encrypt(textFromUserFile, key);
-        System.out.println("Введите путь куда пишем засшифрованный текст: "); //need a method for this(currently working on it on "test")
-        System.out.println("Засшифрованный текст: \n" + encryptedMessage);
+        String pathResultingFile= String.valueOf(createEncryptedFile(encryptedMessage));
+        System.out.println("Ключ для расшифрованния данного файла: " + key  + "\n Пожалуйста, не теряйте ключ.\n");
+        System.out.println("Путь к зашифрованому файлу: \n" + pathResultingFile);
         System.exit(0);
     }
 
     public static void caesarDecrypts(){
-        Scanner console = new Scanner(System.in);
-        System.out.println("Enter a message: "); // should be Path
-        String message = console.nextLine();
+        String textFromUserFile = askUserForFilePath();
         int key = askForKey();
 
-        String decryptedMessage = CaesarCipher.decrypt(message, key);
-        System.out.println("Расшифрованный текст = \n" + decryptedMessage);
+        String decryptedMessage = CaesarCipher.decrypt(textFromUserFile, key);
+        String pathResultingFile= String.valueOf(createDecryptedFile(decryptedMessage));
+        System.out.println("Путь к расшифрованому файлу: \n" + pathResultingFile);
         System.exit(0);
     }
 
-    public static void caesarBruteForce() {    //this should work with files
-        Scanner console = new Scanner(System.in);
-        System.out.println("Enter the encrypted message: "); // should be Path
-        String encryptedMessage = console.nextLine();
+    public static void caesarBruteForce() {    //this should return a string, so it works like the others
+        String textFromUserFile = askUserForFilePath();
 
-        BruteForce.bruteForceDecoder(encryptedMessage);
-        System.out.println("");
+        String decryptedMessage = BruteForce.bruteForceDecoder(textFromUserFile);
+        String pathResultingFile= String.valueOf(createDecryptedFile(decryptedMessage));
+        System.out.println("Путь к расшифрованому файлу: \n" + pathResultingFile);
         System.exit(0);
     }
 
@@ -95,8 +97,8 @@ public class CryptoAnalyzer {
         StringBuilder builder = new StringBuilder();
         Scanner scanner = new Scanner(System.in);
         String textFromUserFile = "";
-        System.out.println("Пожалуйста, введите путь к файлу: ");
         while (true) {
+            System.out.println("Пожалуйста, введите путь к файлу: ");
             Path filePath = Path.of(scanner.nextLine());
             if (Files.isRegularFile(filePath)) {
                 List<String> list = null;
@@ -112,7 +114,6 @@ public class CryptoAnalyzer {
                 break;
             }else {
                 System.out.println("Путь не ведет к файлу.");
-                System.out.println("Пожалуйста, введите путь к файлу для зашифровки: ");
             }
         }
         return textFromUserFile;
@@ -132,21 +133,65 @@ public class CryptoAnalyzer {
         return key;
     }
 
-    public static Path resultingFile(){  // this is being worked on it "test"
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            Path filePath = Path.of(scanner.nextLine());
-            if (Files.isRegularFile(filePath)) {
-                List<String> list = null;
-                try {
-                    list = Files.readAllLines(filePath);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }else {
-                System.out.println("Путь не ведет к файлу.");
-                System.out.println("Пожалуйста, введите путь к файлу для зашифровки: ");
+
+/*
+ below 2 methods(difference is only on the name of the file created) that creates a new file,
+ writes on it the string it got from the other methods and return the path of the new file
+*/
+
+    public static Path createDecryptedFile(String resultingText) {
+        resultingText = resultingText;
+        Path outputFile;
+        File file = new File("/Users/alexei/desktop/" + "Decrypted" + ".txt");
+        int increase = 1;
+        while (file.exists()) {
+            increase++;
+            file = new File("/Users/alexei/desktop/" + "Decrypted" + increase + ".txt");
+        }
+        if (!file.exists()) {
+            try {
+
+                file.createNewFile();
+
+                FileWriter fw = new FileWriter(file.getAbsoluteFile());
+                BufferedWriter bw = new BufferedWriter(fw);
+                bw.write(resultingText);
+                bw.close();
+
+                System.out.println("Готово");
+
+            } catch (IOException e) {
             }
         }
+        outputFile = Path.of(String.valueOf(file));
+        return outputFile;
+    }
+
+    public static Path createEncryptedFile(String resultingText) {
+        resultingText = resultingText;
+        Path outputFile;
+        File file = new File("/Users/alexei/desktop/" + "Encrypted" + ".txt");
+        int increase = 1;
+        while (file.exists()) {
+            increase++;
+            file = new File("/Users/alexei/desktop/" + "Encrypted" + increase + ".txt");
+        }
+        if (!file.exists()) {
+            try {
+
+                file.createNewFile();
+
+                FileWriter fw = new FileWriter(file.getAbsoluteFile());
+                BufferedWriter bw = new BufferedWriter(fw);
+                bw.write(resultingText);
+                bw.close();
+
+                System.out.println("Готово");
+
+            } catch (IOException e) {
+            }
+        }
+        outputFile = Path.of(String.valueOf(file));
+        return outputFile;
     }
 }
