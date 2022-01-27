@@ -96,7 +96,7 @@ public class CryptoAnalyzer {
         System.exit(0);
     }
 
-    public  static void statisticalAnalysis(){
+    public static void statisticalAnalysis() {
         System.out.println("Для этого метода вам необходимо предоствить файл - эталон.\n" +
                 "Желательно такого же автора и стиля как ваш зашифрованный файл.\n" +
                 "Этот файл будет использован для сравнения со зашифрованным файлом и анализа.\n" +
@@ -110,7 +110,7 @@ public class CryptoAnalyzer {
         int key = mostCommonEncrypted - mostCommonExample;
         System.out.println("Сравнение этих двух файлов показал что, ключ для расшифровки = " + key);
 
-        String decryptedMessage = CaesarCipher.decrypt(encryptedText,key);
+        String decryptedMessage = CaesarCipher.decrypt(encryptedText, key);
         String pathResultingFile = String.valueOf(createDecryptedFile(decryptedMessage));
         System.out.println("Путь к расшифрованому файлу: \n" + pathResultingFile);
 
