@@ -160,14 +160,14 @@ public class CryptoAnalyzer {
  writes on it the string it got from the other methods and return the path of the new file
 */
 
-    public static Path createDecryptedFile(String resultingText) {   // will this work on other computers? the path points to Alexei so...?
-        resultingText = resultingText;
+    public static Path createDecryptedFile(String resultingText) {   // System.getProperty("user.home") + "/Desktop/"; -> get the path of the users computer
+        String usersPath = System.getProperty("user.home") + "/Desktop/";
         Path outputFile;
-        File file = new File("/Users/alexei/desktop/" + "Decrypted" + ".txt");
+        File file = new File(usersPath + "Decrypted" + ".txt");
         int increase = 1;
         while (file.exists()) {
             increase++;
-            file = new File("/Users/alexei/desktop/" + "Decrypted" + increase + ".txt");
+            file = new File(usersPath + "Decrypted" + increase + ".txt");
         }
         if (!file.exists()) {
             try {
@@ -189,13 +189,13 @@ public class CryptoAnalyzer {
     }
 
     public static Path createEncryptedFile(String resultingText) {
-        resultingText = resultingText;
+        String usersPath = System.getProperty("user.home") + "/Desktop/";
         Path outputFile;
-        File file = new File("/Users/alexei/desktop/" + "Encrypted" + ".txt");
+        File file = new File(usersPath + "Encrypted" + ".txt");
         int increase = 1;
         while (file.exists()) {
             increase++;
-            file = new File("/Users/alexei/desktop/" + "Encrypted" + increase + ".txt");
+            file = new File(usersPath + "Encrypted" + increase + ".txt");
         }
         if (!file.exists()) {
             try {
