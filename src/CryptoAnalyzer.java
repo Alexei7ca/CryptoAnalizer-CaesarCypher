@@ -8,7 +8,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-//           /Users/alexei/desktop/test.txt   /Users/alexei/desktop/testRuss.txt     /Users/alexei/desktop/RussNoYio.txt
+//           /Users/alexei/desktop/test.txt   /Users/alexei/desktop/testRuss.txt    /Users/alexei/desktop/Encrypted.txt
 
 
 public class CryptoAnalyzer {
@@ -48,6 +48,7 @@ public class CryptoAnalyzer {
                     caesarBruteForce();
                 } else if (selection == 4) {
                     selection = 4;
+                    statisticalAnalysis();
                 } else if (selection == 0) {
                     return;
                 } else {
@@ -95,6 +96,27 @@ public class CryptoAnalyzer {
         System.exit(0);
     }
 
+    public  static void statisticalAnalysis(){
+        System.out.println("Для этого метода вам необходимо предоствить файл - эталон.\n" +
+                "Желательно такого же автора и стиля как ваш зашифрованный файл.\n" +
+                "Этот файл будет использован для сравнения со зашифрованным файлом и анализа.\n" +
+                "Предоставьте файл - эталон.");
+        String textExample = askUserForFilePath();
+        System.out.println("Предоставьте файл для расшифровки");
+        String encryptedText = askUserForFilePath();
+
+        char mostCommonExample = StatisticalAnalysis.mostCommonCharacter(textExample);
+        char mostCommonEncrypted = StatisticalAnalysis.mostCommonCharacter(encryptedText);
+        int key = mostCommonEncrypted - mostCommonExample;
+        System.out.println("Сравнение этих двух файлов показал что, ключ для расшифровки = " + key);
+
+        String decryptedMessage = CaesarCipher.decrypt(encryptedText,key);
+        String pathResultingFile = String.valueOf(createDecryptedFile(decryptedMessage));
+        System.out.println("Путь к расшифрованому файлу: \n" + pathResultingFile);
+
+        System.exit(0);
+    }
+
 
 // bellow are the methods who ask the user for paths and keys
 
@@ -116,6 +138,7 @@ public class CryptoAnalyzer {
                     builder.append(str);
                 textFromUserFile = builder.toString();
                 System.out.println("Оригинальный текст из вашего файла: \n" + textFromUserFile);
+                System.out.println();
                 break;
             } else {
                 System.out.println("Путь не ведет к файлу.");
@@ -157,10 +180,11 @@ public class CryptoAnalyzer {
 
 /*
  below 2 methods(difference is only on the name of the file created) that creates a new file,
- writes on it the string it got from the other methods and return the path of the new file
+ writes on it the string it got from the other methods and return the path of the new file.
+ System.getProperty("user.home") + "/Desktop/"; -> get the path of the user's computer
 */
 
-    public static Path createDecryptedFile(String resultingText) {   // System.getProperty("user.home") + "/Desktop/"; -> get the path of the users computer
+    public static Path createDecryptedFile(String resultingText) {
         String usersPath = System.getProperty("user.home") + "/Desktop/";
         Path outputFile;
         File file = new File(usersPath + "Decrypted" + ".txt");
