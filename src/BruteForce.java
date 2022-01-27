@@ -1,22 +1,38 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class BruteForce {
 
 
-    static void bruteForceDecoder(String cipherText) {
-        for (int key = 0; key < 1071; key++) {
-            String decryptedText = CaesarCipher.decrypt(cipherText, key);
-            if (isMessageValid(decryptedText))
-                System.out.println("Decrypted Text Using key"+key+":"+decryptedText);
+    public static List<String> bruteForceDecoder(String encryptedText) {
+
+
+        String decryptedText;
+        List<String> result = new ArrayList<>();
+        for (int key = 0; key < 1101; key++) {
+            decryptedText = CaesarCipher.decrypt(encryptedText, key);
+            if (isMessageValid(decryptedText)) {
+                decryptedText = "Расшифрованный текст используя КЛЮЧ: " + key + "\n" + decryptedText + "\n";
+                result.add(decryptedText);
+            }
         }
+        System.out.println(result);
+        return result;
 
     }
-    public static boolean isLatinLetter(char c) {
-        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+
+    public static boolean isValidSymbol(char c) {
+
+        return (c >= '\n' && c <= 'ї');  //literally every symbol
+
     }
 
-    private static boolean isMessageValid(String decryptedText) { //does not work with spaces or symbols or numbers or russian
-        for (char c : decryptedText.toCharArray())
-            if (!isLatinLetter(c))
+    private static boolean isMessageValid(String decryptedText) {
+        for (char currentChar : decryptedText.toCharArray())
+            if (!isValidSymbol(currentChar)) {
                 return false;
+            }
         return true;
     }
+
 }

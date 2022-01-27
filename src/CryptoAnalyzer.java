@@ -8,13 +8,16 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+//           /Users/alexei/desktop/test.txt   /Users/alexei/desktop/testRuss.txt     /Users/alexei/desktop/RussNoYio.txt
+
+
 public class CryptoAnalyzer {
     public static void main(String[] args) {
         welcomeUser();
 
     }
 
-    public static void welcomeUser(){
+    public static void welcomeUser() {
 
         System.out.println("Добро Пожаловать!");
         System.out.println("Чем мы можем сегодня помочь?");
@@ -27,7 +30,7 @@ public class CryptoAnalyzer {
         System.out.println("До свидания!");
     }
 
-    public static void userSelection(){
+    public static void userSelection() {
         while (true) {
             int selection = 0;
             try {
@@ -57,7 +60,6 @@ public class CryptoAnalyzer {
     }
 
 
-
     // below are the calls for the encryption methods
 
     public static void caesarEncrypts() {
@@ -65,27 +67,30 @@ public class CryptoAnalyzer {
         int key = askForKey();
 
         String encryptedMessage = CaesarCipher.encrypt(textFromUserFile, key);
-        String pathResultingFile= String.valueOf(createEncryptedFile(encryptedMessage));
-        System.out.println("Ключ для расшифрованния данного файла: " + key  + "\n Пожалуйста, не теряйте ключ.\n");
+        String pathResultingFile = String.valueOf(createEncryptedFile(encryptedMessage));
+        System.out.println("Ключ для расшифрованния данного файла: " + key + "\n Пожалуйста, не теряйте ключ.\n");
         System.out.println("Путь к зашифрованому файлу: \n" + pathResultingFile);
         System.exit(0);
     }
 
-    public static void caesarDecrypts(){
+    public static void caesarDecrypts() {
         String textFromUserFile = askUserForFilePath();
         int key = askForKey();
 
         String decryptedMessage = CaesarCipher.decrypt(textFromUserFile, key);
-        String pathResultingFile= String.valueOf(createDecryptedFile(decryptedMessage));
+        String pathResultingFile = String.valueOf(createDecryptedFile(decryptedMessage));
         System.out.println("Путь к расшифрованому файлу: \n" + pathResultingFile);
         System.exit(0);
     }
 
     public static void caesarBruteForce() {    //this should return a string, so it works like the others
         String textFromUserFile = askUserForFilePath();
+        int key;
+        BruteForce.bruteForceDecoder(textFromUserFile);
+        key = askForBruteForceKey();
 
-        String decryptedMessage = BruteForce.bruteForceDecoder(textFromUserFile);
-        String pathResultingFile= String.valueOf(createDecryptedFile(decryptedMessage));
+        String decryptedMessage = CaesarCipher.decrypt(textFromUserFile, key);
+        String pathResultingFile = String.valueOf(createDecryptedFile(decryptedMessage));
         System.out.println("Путь к расшифрованому файлу: \n" + pathResultingFile);
         System.exit(0);
     }
@@ -93,7 +98,7 @@ public class CryptoAnalyzer {
 
 // bellow are the methods who ask the user for paths and keys
 
-    private static String askUserForFilePath()  {
+    private static String askUserForFilePath() {
         StringBuilder builder = new StringBuilder();
         Scanner scanner = new Scanner(System.in);
         String textFromUserFile = "";
@@ -112,7 +117,7 @@ public class CryptoAnalyzer {
                 textFromUserFile = builder.toString();
                 System.out.println("Оригинальный текст из вашего файла: \n" + textFromUserFile);
                 break;
-            }else {
+            } else {
                 System.out.println("Путь не ведет к файлу.");
             }
         }
@@ -120,16 +125,32 @@ public class CryptoAnalyzer {
     }
 
 
-    public static int askForKey(){
-            int key = 0;
-            System.out.println("Введите целое число (ваш ключ):");
-            try {
-                Scanner console = new Scanner(System.in);
-                key = console.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("Неправильный ввод,");
-                key = askForKey();
-            }
+    public static int askForKey() {  //if there's time add a check that the key should be >0 and <950
+        int key = 0;
+        System.out.println("Пожалуйста, обратите внимание на то, что ввести числа больше 950 может составит программу работать некорректно."); //added
+        System.out.println("Введите целое число (ваш ключ):");
+        try {
+            Scanner console = new Scanner(System.in);
+            key = console.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Неправильный ввод,");
+            key = askForKey();
+        }
+        return key;
+    }
+
+    public static int askForBruteForceKey() {
+        int key = 0;
+        System.out.println("Сверху варианты расшифровки вашего файла,");
+        System.out.print("пожалуйста, выбирите подходящий вам вариант и скопируйте его ключ здесь ->");
+        System.out.println();
+        try {
+            Scanner console = new Scanner(System.in);
+            key = console.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Неправильный ввод, вам нужна только цифра которая указана как ключ");
+            key = askForBruteForceKey();
+        }
         return key;
     }
 
@@ -139,7 +160,7 @@ public class CryptoAnalyzer {
  writes on it the string it got from the other methods and return the path of the new file
 */
 
-    public static Path createDecryptedFile(String resultingText) {
+    public static Path createDecryptedFile(String resultingText) {   // will this work on other computers? the path points to Alexei so...?
         resultingText = resultingText;
         Path outputFile;
         File file = new File("/Users/alexei/desktop/" + "Decrypted" + ".txt");
