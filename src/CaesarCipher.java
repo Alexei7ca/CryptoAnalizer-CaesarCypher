@@ -5,7 +5,7 @@ public class CaesarCipher {
     static String neededSymbols = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzАаБбВвГгҐґДдЕеЄєЖжЗзИиІіЇїЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЬьЮюЯяЪъэЭыЫёЁ.?“‘,-–—)!:;)()[]/1234567890«» ";
 
 
-    public static String encrypt(String message, int key) { // max key is neededCharacters.length == 157 (157 and 0 give the same result)
+    public static String encrypt(String message, int key) { // max key is neededCharacters.length == 156
 
         char[] usersCharacters = message.toCharArray();
         char[] neededCharacters = neededSymbols.toCharArray();

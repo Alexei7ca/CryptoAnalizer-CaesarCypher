@@ -91,12 +91,15 @@ public class CryptoAnalyzer {
 
     public static void caesarBruteForce() {
         String textFromUserFile = askUserForFilePath();
-        int key;
-        BruteForce.bruteForceDecoder(textFromUserFile);
-        key = askForBruteForceKey();
+        System.out.println("Идет процесс расшифровки, это может занять пару минут.");
+        System.out.println();
+//        int key;
+//        BruteForce.bruteForceDecoder(textFromUserFile);
+        String result = String.join(", ", BruteForce.bruteForceDecoder(textFromUserFile));    //working here trying to convert listString to string and output it directly
+//        key = askForBruteForceKey();
 
-        String decryptedMessage = CaesarCipher.decrypt(textFromUserFile, key);
-        String pathResultingFile = String.valueOf(createDecryptedFile(decryptedMessage));
+//        String decryptedMessage = CaesarCipher.decrypt(textFromUserFile, key);
+        String pathResultingFile = String.valueOf(createDecryptedFile(result));
         System.out.println("Путь к расшифрованому файлу: \n" + pathResultingFile);
         System.exit(0);
     }
@@ -146,8 +149,8 @@ public class CryptoAnalyzer {
                 for (String str : list)
                     builder.append(str);
                 textFromUserFile = builder.toString();
-                System.out.println("Оригинальный текст из вашего файла: \n" + textFromUserFile);
-                System.out.println();
+//                System.out.println("Оригинальный текст из вашего файла: \n" + textFromUserFile);   //too much fluff, no point in showing this
+//                System.out.println();
                 break;
             } else {
                 System.out.println("Путь не ведет к файлу.");
