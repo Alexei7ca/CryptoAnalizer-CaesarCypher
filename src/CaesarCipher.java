@@ -2,40 +2,45 @@
 
 public class CaesarCipher {
 
-    public static String encrypt(String message, int key) {
-        String encryptedMessage = "";
-        char currentChar;
-        for (int i = 0; i < message.length(); ++i) {
-            currentChar = message.charAt(i);
-            if (currentChar >= '\n' && currentChar <= 'ї') { //"space" is 32 in ASCII(first character latin symbols) and "я" 044f (last character of basic cyrillic symbols) (in between are all punctuation symbols as well as latin and russian alphabetises)
-                currentChar = (char) (currentChar + key);
+    static String neededSymbols = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzАаБбВвГгҐґДдЕеЄєЖжЗзИиІіЇїЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЬьЮюЯяЪъэЭыЫёЁ.?“‘,-–—)!:;)()[]/1234567890«» ";
 
-                if (currentChar > 'ї') {
-                    currentChar = (char) (currentChar - 'ї' + '\n' - 1);  //currentChar = (char) (currentChar - 'я' + 'a' - 1);
+
+    public static String encrypt(String message, int key) { // max key is neededCharacters.length == 157 (157 and 0 give the same result)
+
+        char[] usersCharacters = message.toCharArray();
+        char[] neededCharacters = neededSymbols.toCharArray();
+        char[] result = new char[usersCharacters.length];
+
+        for (int i = 0; i < usersCharacters.length; i++) {
+            char usersCharacter = usersCharacters[i];
+            for (int j = 0; j < neededCharacters.length; j++) {
+                char ch = neededCharacters[j];
+                if (usersCharacter == ch) {
+                    result[i] = neededCharacters[(j + key) % neededCharacters.length];
                 }
-
-                encryptedMessage += currentChar;
             }
         }
-        return encryptedMessage;
+        return new String(result);
     }
 
     public static String decrypt(String message, int key) {
-        String decryptedMessage = "";
-        char currentCharacter;
-        for (int i = 0; i < message.length(); ++i) {
-            currentCharacter = message.charAt(i);
-            if (currentCharacter >= '\n' && currentCharacter <= 'ї') {
-                currentCharacter = (char) (currentCharacter - key);
 
-                if (currentCharacter < '\n') {
-                    currentCharacter = (char) (currentCharacter + 'ї' - '\n' + 1);
+        char[] usersCharacters = message.toCharArray();
+
+        char[] neededCharacters = neededSymbols.toCharArray();
+        char[] result = new char[usersCharacters.length];
+
+        int decryptKey = neededCharacters.length - key;
+        for (int i = 0; i < usersCharacters.length; i++) {
+            char usersCharacter = usersCharacters[i];
+            for (int j = 0; j < neededCharacters.length; j++) {
+                char ch = neededCharacters[j];
+                if (usersCharacter == ch) {
+                    result[i] = neededCharacters[(j + decryptKey) % neededCharacters.length];
                 }
-
-                decryptedMessage += currentCharacter;
             }
         }
-        return decryptedMessage;
+        return new String(result);
     }
 
 }

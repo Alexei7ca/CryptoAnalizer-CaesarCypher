@@ -9,7 +9,7 @@ public class BruteForce {
 
         String decryptedText;
         List<String> result = new ArrayList<>();
-        for (int key = 0; key < 1101; key++) {
+        for (int key = 0; key < 157; key++) {
             decryptedText = CaesarCipher.decrypt(encryptedText, key);
             if (isMessageValid(decryptedText)) {
                 decryptedText = "Расшифрованный текст используя КЛЮЧ: " + key + "\n" + decryptedText + "\n";
@@ -23,7 +23,8 @@ public class BruteForce {
 
     public static boolean isValidSymbol(char c) {
 
-        return (c >= '\n' && c <= 'ї');  //literally every symbol
+//        return (c >= '\n' && c <= 'ї');  //literally every symbol
+        return (c >= ' ' && c <= '“');  //testing new
 
     }
 

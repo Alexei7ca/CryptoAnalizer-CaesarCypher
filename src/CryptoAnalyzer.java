@@ -8,7 +8,12 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-//           /Users/alexei/desktop/test.txt   /Users/alexei/desktop/testRuss.txt    /Users/alexei/desktop/Encrypted.txt
+/*
+           /Users/alexei/desktop/TestEsp.txt   /Users/alexei/desktop/testRuss.txt    /Users/alexei/desktop/Encrypted.txt
+there a bug that drops chars in the final file,
+ if the text has more than 1300 chars the end file gets written without 2,6,etc chars (the longer the text the worse it gets)
+ noticed that the missing chars are whatever char that replaces the space from the original text
+*/
 
 
 public class CryptoAnalyzer {
@@ -84,7 +89,7 @@ public class CryptoAnalyzer {
         System.exit(0);
     }
 
-    public static void caesarBruteForce() {    //this should return a string, so it works like the others
+    public static void caesarBruteForce() {
         String textFromUserFile = askUserForFilePath();
         int key;
         BruteForce.bruteForceDecoder(textFromUserFile);
@@ -106,9 +111,13 @@ public class CryptoAnalyzer {
         String encryptedText = askUserForFilePath();
 
         char mostCommonExample = StatisticalAnalysis.mostCommonCharacter(textExample);
+//        System.out.println("example char = " + mostCommonExample);             //just for testing not for user
         char mostCommonEncrypted = StatisticalAnalysis.mostCommonCharacter(encryptedText);
-        int key = mostCommonEncrypted - mostCommonExample;
-        System.out.println("Сравнение этих двух файлов показал что, ключ для расшифровки = " + key);
+//        System.out.println("example encrypted = " + mostCommonEncrypted);      //just for testing not for user
+        int firstPiece = StatisticalAnalysis.keyFinder(mostCommonEncrypted);                           //did this work? -> it got closer, there's still some rough edges
+        int secondPiece = StatisticalAnalysis.keyFinder(mostCommonExample);
+        int key = firstPiece - secondPiece;     //changing places here fcks everything up
+//        System.out.println("Сравнение этих двух файлов показал что, ключ для расшифровки = " + key);   //just for testing not for user
 
         String decryptedMessage = CaesarCipher.decrypt(encryptedText, key);
         String pathResultingFile = String.valueOf(createDecryptedFile(decryptedMessage));
@@ -148,10 +157,10 @@ public class CryptoAnalyzer {
     }
 
 
-    public static int askForKey() {  //if there's time add a check that the key should be >0 and <950
+    public static int askForKey() {  //if there's time add a check that max key is neededCharacters.length == 157 (157 and 0 give the same result)
         int key = 0;
-        System.out.println("Пожалуйста, обратите внимание на то, что ввести числа больше 950 может составит программу работать некорректно."); //added
-        System.out.println("Введите целое число (ваш ключ):");
+        System.out.println("Пожалуйста, обратите внимание на то, ключ может быть любое целое число от 1 до 156."); //added
+        System.out.println("Введите ваш ключ (любое целое число от 1 до 156):");
         try {
             Scanner console = new Scanner(System.in);
             key = console.nextInt();
@@ -201,6 +210,7 @@ public class CryptoAnalyzer {
                 FileWriter fw = new FileWriter(file.getAbsoluteFile());
                 BufferedWriter bw = new BufferedWriter(fw);
                 bw.write(resultingText);
+                bw.flush();                                                  //trying to found those 2 missing chars
                 bw.close();
 
                 System.out.println("Готово");
@@ -229,6 +239,7 @@ public class CryptoAnalyzer {
                 FileWriter fw = new FileWriter(file.getAbsoluteFile());
                 BufferedWriter bw = new BufferedWriter(fw);
                 bw.write(resultingText);
+                bw.flush();                                               //trying to found those 2 missing chars
                 bw.close();
 
                 System.out.println("Готово");

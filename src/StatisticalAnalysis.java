@@ -32,4 +32,21 @@ public class StatisticalAnalysis {
 
         return mostCommonChar;
     }
+
+    public static int keyFinder(char mostCommonChar) {
+
+        char charNeeded = mostCommonChar;
+        String neededSymbols = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzАаБбВвГгҐґДдЕеЄєЖжЗзИиІіЇїЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЬьЮюЯяЪъэЭыЫёЁ.?“‘,-–—)!:;)()[]/1234567890«» ";
+        char[] symbols = neededSymbols.toCharArray();
+
+        int found = -1;
+        for (int i = 0; i < symbols.length; ++i) {
+            if (symbols[i] == charNeeded) {
+                found = i;
+                break;
+            }
+        }
+
+        return found;
+    }
 }
