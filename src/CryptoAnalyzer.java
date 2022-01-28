@@ -95,7 +95,7 @@ public class CryptoAnalyzer {
         System.out.println();
 //        int key;
 //        BruteForce.bruteForceDecoder(textFromUserFile);
-        String result = String.join(", ", BruteForce.bruteForceDecoder(textFromUserFile));    //working here trying to convert listString to string and output it directly
+        String result = String.join(", ", BruteForce.bruteForceDecoder(textFromUserFile));    //working here trying to convert listString to string and output it directly -> seems to work!
 //        key = askForBruteForceKey();
 
 //        String decryptedMessage = CaesarCipher.decrypt(textFromUserFile, key);
@@ -174,7 +174,7 @@ public class CryptoAnalyzer {
         return key;
     }
 
-    public static int askForBruteForceKey() {
+    public static int askForBruteForceKey() {  //not needed anymore, but I'll keep it around just in case.
         int key = 0;
         System.out.println("Сверху варианты расшифровки вашего файла,");
         System.out.print("пожалуйста, выбирите подходящий вам вариант и скопируйте его ключ здесь ->");
@@ -252,5 +252,17 @@ public class CryptoAnalyzer {
         }
         outputFile = Path.of(String.valueOf(file));
         return outputFile;
+    }
+
+    public static void userIsWaiting(){  //this just makes the wait longer :(
+        for (int i = 5; i > 0; i--)
+        {
+            System.out.print("\uD83C\uDFC3\u200D ️");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
