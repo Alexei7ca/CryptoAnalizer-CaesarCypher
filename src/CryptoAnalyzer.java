@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /*
-           /Users/alexei/desktop/TestEsp.txt   /Users/alexei/desktop/testRuss.txt    /Users/alexei/desktop/Encrypted.txt
+           /Users/alexei/desktop/.txt    /Users/alexei/desktop/Encrypted.txt
 there a bug that drops chars in the final file,
  if the text has more than 1300 chars the end file gets written without 2,6,etc chars (the longer the text the worse it gets)
  noticed that the missing chars are whatever char that replaces the space from the original text
@@ -94,11 +94,11 @@ public class CryptoAnalyzer {
         System.out.println("Идет процесс расшифровки, это может занять пару минут.");
         System.out.println();
 //        int key;
-//        BruteForce.bruteForceDecoder(textFromUserFile);
+        BruteForce.bruteForceDecoder(textFromUserFile);
         String result = String.join(", ", BruteForce.bruteForceDecoder(textFromUserFile));    //working here trying to convert listString to string and output it directly -> seems to work!
-//        key = askForBruteForceKey();
+//        key = askForBruteForceKey(); //in case we show options to user for him to pick a key
 
-//        String decryptedMessage = CaesarCipher.decrypt(textFromUserFile, key);
+//        String decryptedMessage = CaesarCipher.decrypt(textFromUserFile, key);  //in case we show options to user for him to pick a key
         String pathResultingFile = String.valueOf(createDecryptedFile(result));
         System.out.println("Путь к расшифрованому файлу: \n" + pathResultingFile);
         System.exit(0);
@@ -112,6 +112,7 @@ public class CryptoAnalyzer {
         String textExample = askUserForFilePath();
         System.out.println("Предоставьте файл для расшифровки");
         String encryptedText = askUserForFilePath();
+        System.out.println("Идет процесс расшифровки, это может занять пару минут.");
 
         char mostCommonExample = StatisticalAnalysis.mostCommonCharacter(textExample);
 //        System.out.println("example char = " + mostCommonExample);             //just for testing not for user

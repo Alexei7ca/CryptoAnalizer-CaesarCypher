@@ -12,8 +12,10 @@ public class BruteForce {
         for (int key = 0; key < 156; key++) {
             decryptedText = CaesarCipher.decrypt(encryptedText, key);
             char mostUsed = mostCommonCharacter(decryptedText);
-            if (isMessageValid(decryptedText) && (mostUsed == ' ')) {
-                decryptedText = "Расшифрованный текст используя КЛЮЧ: " + key + "\n" + decryptedText + "\n";
+//            if (isMessageValid(decryptedText) && (mostUsed == ' ')) {
+            if (mostUsed == ' ') {
+//            if (isMessageValid(decryptedText)) {
+//                decryptedText = "Расшифрованный текст используя КЛЮЧ: " + key + "\n" + decryptedText + "\n"; //in case we show options to user for him to pick a key
                 result.add(decryptedText);
             }
         }
@@ -21,21 +23,20 @@ public class BruteForce {
         return result;
 
     }
-
-    public static boolean isValidSymbol(char c) {
-
-//        return (c >= '\n' && c <= 'ї');  //literally every symbol
-        return (c >= ' ' && c <= '“');  //testing new
-
-    }
-
-    private static boolean isMessageValid(String decryptedText) {
-        for (char currentChar : decryptedText.toCharArray())
-            if (!isValidSymbol(currentChar)) {
-                return false;
-            }
-        return true;
-    }
+//isValidSymbol and isMessageValid are redundant and can cause problems because we now have a limited alphabet to work with
+//    public static boolean isValidSymbol(char c) {
+//
+//        return (c >= ' ' && c <= '“');
+//
+//    }
+//
+//    private static boolean isMessageValid(String decryptedText) {
+//        for (char currentChar : decryptedText.toCharArray())
+//            if (!isValidSymbol(currentChar)) {
+//                return false;
+//            }
+//        return true;
+//    }
 
     public static char mostCommonCharacter(String UsersText) {
         char mostCommonChar;
