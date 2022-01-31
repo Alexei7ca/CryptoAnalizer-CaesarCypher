@@ -231,5 +231,10 @@ with key 119 it mistakes "k" for "h" en the resulting text
 with key 109 it mistakes "o" for "p" en the resulting text
 with key 99 it's absolute chaos --- russ txt is fine
 with key 89 it mistakes "w" for "z" en the resulting text
-something is really wrong with the "9"
+with key 79 seems fine
+with key 69 seems fine
+with key 29 seems fine
+with key 19 seems fine
+with key 9 seems fine
+something is really wrong with the "9" starting on "89"
  */
