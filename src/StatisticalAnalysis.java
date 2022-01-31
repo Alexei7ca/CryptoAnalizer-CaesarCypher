@@ -26,18 +26,13 @@ public class StatisticalAnalysis {
             }
         }
         mostCommonChar = mostUsedLetter.charAt(0);
-
-//        System.out.println("Most used char: " + "'" + mostCommonChar + "'");
-//        System.out.println("Char count: " + count);
-
         return mostCommonChar;
     }
 
     public static int keyFinder(char mostCommonChar) {
 
         char charNeeded = mostCommonChar;
-        String neededSymbols = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzАаБбВвГгҐґДдЕеЄєЖжЗзИиІіЇїЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЬьЮюЯяЪъэЭыЫёЁ.?“‘,-–—)!:;)()[]/1234567890«» ";
-        char[] symbols = neededSymbols.toCharArray();
+        char[] symbols = CaesarCipher.NEEDED_SYMBOLS.toCharArray();
 
         int found = -1;
         for (int i = 0; i < symbols.length; ++i) {
@@ -46,7 +41,6 @@ public class StatisticalAnalysis {
                 break;
             }
         }
-
         return found;
     }
 }

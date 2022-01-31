@@ -5,15 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
-
-/*
-           /Users/alexei/desktop/.txt    /Users/alexei/desktop/Encrypted.txt
-there a bug that drops chars in the final file,
- if the text has more than 1300 chars the end file gets written without 2,6,etc chars (the longer the text the worse it gets)
- noticed that the missing chars are whatever char that replaces the space from the original text
-*/
 
 
 public class CryptoAnalyzer {
@@ -43,16 +35,12 @@ public class CryptoAnalyzer {
                 selection = console.nextInt();
 
                 if (selection == 1) {
-                    selection = 1;
                     caesarEncrypts();
                 } else if (selection == 2) {
-                    selection = 2;
                     caesarDecrypts();
                 } else if (selection == 3) {
-                    selection = 3;
                     caesarBruteForce();
                 } else if (selection == 4) {
-                    selection = 4;
                     statisticalAnalysis();
                 } else if (selection == 0) {
                     return;
@@ -93,40 +81,33 @@ public class CryptoAnalyzer {
         String textFromUserFile = askUserForFilePath();
         System.out.println("Идет процесс расшифровки, это может занять пару минут.");
         System.out.println();
-//        int key;
-        BruteForce.bruteForceDecoder(textFromUserFile);
-        String result = String.join(", ", BruteForce.bruteForceDecoder(textFromUserFile));    //working here trying to convert listString to string and output it directly -> seems to work!
-//        key = askForBruteForceKey(); //in case we show options to user for him to pick a key
 
-//        String decryptedMessage = CaesarCipher.decrypt(textFromUserFile, key);  //in case we show options to user for him to pick a key
+        String result = String.join(", ", BruteForce.bruteForceDecoder(textFromUserFile));
         String pathResultingFile = String.valueOf(createDecryptedFile(result));
         System.out.println("Путь к расшифрованому файлу: \n" + pathResultingFile);
         System.exit(0);
     }
 
     public static void statisticalAnalysis() {
-        System.out.println("Для этого метода вам необходимо предоствить файл - эталон.\n" +
-                "Желательно такого же автора и стиля как ваш зашифрованный файл.\n" +
-                "Этот файл будет использован для сравнения со зашифрованным файлом и анализа.\n" +
-                "Предоставьте файл - эталон.");
+        System.out.println("""
+                Для этого метода вам необходимо предоствить файл - эталон.
+                Желательно такого же автора и стиля как ваш зашифрованный файл.
+                Этот файл будет использован для сравнения со зашифрованным файлом и анализа.
+                Предоставьте файл - эталон.""");
         String textExample = askUserForFilePath();
         System.out.println("Предоставьте файл для расшифровки");
         String encryptedText = askUserForFilePath();
         System.out.println("Идет процесс расшифровки, это может занять пару минут.");
 
         char mostCommonExample = StatisticalAnalysis.mostCommonCharacter(textExample);
-//        System.out.println("example char = " + mostCommonExample);             //just for testing not for user
         char mostCommonEncrypted = StatisticalAnalysis.mostCommonCharacter(encryptedText);
-//        System.out.println("example encrypted = " + mostCommonEncrypted);      //just for testing not for user
-        int firstPiece = StatisticalAnalysis.keyFinder(mostCommonEncrypted);                           //did this work? -> it got closer, there's still some rough edges
+        int firstPiece = StatisticalAnalysis.keyFinder(mostCommonEncrypted);
         int secondPiece = StatisticalAnalysis.keyFinder(mostCommonExample);
-        int key = firstPiece - secondPiece;     //changing places here fcks everything up
-//        System.out.println("Сравнение этих двух файлов показал что, ключ для расшифровки = " + key);   //just for testing not for user
+        int key = firstPiece - secondPiece;
 
         String decryptedMessage = CaesarCipher.decrypt(encryptedText, key);
         String pathResultingFile = String.valueOf(createDecryptedFile(decryptedMessage));
         System.out.println("Путь к расшифрованому файлу: \n" + pathResultingFile);
-
         System.exit(0);
     }
 
@@ -134,24 +115,17 @@ public class CryptoAnalyzer {
 // bellow are the methods who ask the user for paths and keys
 
     private static String askUserForFilePath() {
-        StringBuilder builder = new StringBuilder();
         Scanner scanner = new Scanner(System.in);
         String textFromUserFile = "";
         while (true) {
             System.out.println("Пожалуйста, введите путь к файлу: ");
             Path filePath = Path.of(scanner.nextLine());
             if (Files.isRegularFile(filePath)) {
-                List<String> list = null;
                 try {
-                    list = Files.readAllLines(filePath);
+                    textFromUserFile = Files.readString(filePath);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                for (String str : list)
-                    builder.append(str);
-                textFromUserFile = builder.toString();
-//                System.out.println("Оригинальный текст из вашего файла: \n" + textFromUserFile);   //too much fluff, no point in showing this
-//                System.out.println();
                 break;
             } else {
                 System.out.println("Путь не ведет к файлу.");
@@ -163,7 +137,7 @@ public class CryptoAnalyzer {
 
     public static int askForKey() {  //if there's time add a check that max key is neededCharacters.length == 157 (157 and 0 give the same result)
         int key = 0;
-        System.out.println("Пожалуйста, обратите внимание на то, ключ может быть любое целое число от 1 до 156."); //added
+        System.out.println("Пожалуйста, обратите внимание на то, ключ может быть любое целое число от 1 до 156.");
         System.out.println("Введите ваш ключ (любое целое число от 1 до 156):");
         try {
             Scanner console = new Scanner(System.in);
@@ -174,22 +148,6 @@ public class CryptoAnalyzer {
         }
         return key;
     }
-
-    public static int askForBruteForceKey() {  //not needed anymore, but I'll keep it around just in case.
-        int key = 0;
-        System.out.println("Сверху варианты расшифровки вашего файла,");
-        System.out.print("пожалуйста, выбирите подходящий вам вариант и скопируйте его ключ здесь ->");
-        System.out.println();
-        try {
-            Scanner console = new Scanner(System.in);
-            key = console.nextInt();
-        } catch (InputMismatchException e) {
-            System.out.println("Неправильный ввод, вам нужна только цифра которая указана как ключ");
-            key = askForBruteForceKey();
-        }
-        return key;
-    }
-
 
 /*
  below 2 methods(difference is only on the name of the file created) that creates a new file,
@@ -214,12 +172,12 @@ public class CryptoAnalyzer {
                 FileWriter fw = new FileWriter(file.getAbsoluteFile());
                 BufferedWriter bw = new BufferedWriter(fw);
                 bw.write(resultingText);
-                bw.flush();                                                  //trying to found those 2 missing chars
+                bw.flush();
                 bw.close();
 
                 System.out.println("Готово");
 
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
         }
         outputFile = Path.of(String.valueOf(file));
@@ -243,27 +201,35 @@ public class CryptoAnalyzer {
                 FileWriter fw = new FileWriter(file.getAbsoluteFile());
                 BufferedWriter bw = new BufferedWriter(fw);
                 bw.write(resultingText);
-                bw.flush();                                               //trying to found those 2 missing chars
+                bw.flush();
                 bw.close();
 
                 System.out.println("Готово");
 
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
         }
         outputFile = Path.of(String.valueOf(file));
         return outputFile;
     }
 
-    public static void userIsWaiting(){  //this just makes the wait longer :(
-        for (int i = 5; i > 0; i--)
-        {
-            System.out.print("\uD83C\uDFC3\u200D ️");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }
+
+
+/*
+           /Users/alexei/desktop/.txt    /Users/alexei/desktop/Encrypted.txt
+there's a bug that drops chars in the final file,
+ if the text has more than 1300 chars the end file gets written without 2,6,etc chars (the longer the text the worse it gets)
+ noticed that the missing chars are whatever char that replaces the space from the original text
+*/
+
+/*
+if english text
+with key 139 it's absolute chaos   --- russ txt also
+with key 129 it mistakes "e" for "f" en the resulting text ---- russ text is fine
+with key 119 it mistakes "k" for "h" en the resulting text
+with key 109 it mistakes "o" for "p" en the resulting text
+with key 99 it's absolute chaos --- russ txt is fine
+with key 89 it mistakes "w" for "z" en the resulting text
+something is really wrong with the "9"
+ */

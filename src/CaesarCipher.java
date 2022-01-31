@@ -1,14 +1,12 @@
-// changed ' ' for '\n'  and  'я' for 'ї'
-
 public class CaesarCipher {
 
-    static String neededSymbols = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzАаБбВвГгҐґДдЕеЄєЖжЗзИиІіЇїЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЬьЮюЯяЪъэЭыЫёЁ.?“‘,-–—)!:;)()[]/1234567890«» ";
+    static String NEEDED_SYMBOLS = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzАаБбВвГгҐґДдЕеЄєЖжЗзИиІіЇїЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЬьЮюЯяЪъэЭыЫёЁ.?“‘,-–—)!:;)()[]/1234567890«» ";
 
 
     public static String encrypt(String message, int key) { // max key is neededCharacters.length == 156
 
         char[] usersCharacters = message.toCharArray();
-        char[] neededCharacters = neededSymbols.toCharArray();
+        char[] neededCharacters = NEEDED_SYMBOLS.toCharArray();
         char[] result = new char[usersCharacters.length];
 
         for (int i = 0; i < usersCharacters.length; i++) {
@@ -27,7 +25,7 @@ public class CaesarCipher {
 
         char[] usersCharacters = message.toCharArray();
 
-        char[] neededCharacters = neededSymbols.toCharArray();
+        char[] neededCharacters = NEEDED_SYMBOLS.toCharArray();
         char[] result = new char[usersCharacters.length];
 
         int decryptKey = neededCharacters.length - key;
